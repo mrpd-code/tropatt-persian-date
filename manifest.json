@@ -1,0 +1,124 @@
+{
+    "name": "crm.persian-calendar",
+    "version": "1.0.0",
+    "vendor": "mrpd-code",
+    "author": "MRPD Code",
+    "author_url": "https://github.com/mrpd-code/tropatt-persian-date",
+    "title": "Persian Calendar & Date/Time",
+    "description": "Persian (Jalali/Shamsi) calendar, date picker and date-time picker for the TropaTT UI. Presentation-only: the app keeps storing Gregorian dates, the module converts on input and on display. Includes global Jalali formatting utilities, Persian numerals, full RTL support and light/dark theme integration.",
+    "core_version": ">=1.0.0",
+    "license": "AGPL-3.0",
+    "category": "productivity",
+    "dependencies": [],
+    "require_permissions": [
+        "module.persian-calendar.view",
+        "module.persian-calendar.manage"
+    ],
+    "api_routes": "api/config/routes.php",
+    "web_routes": "web/config/routes.php",
+    "migrations": null,
+    "assets": {
+        "css": [
+            "web/assets/css/persian-calendar.css"
+        ],
+        "js": [
+            "web/assets/js/persian-calendar.js"
+        ],
+        "css_routes": {
+            "module-persian-calendar": "web/assets/css/persian-calendar.css"
+        },
+        "js_routes": {
+            "module-persian-calendar": "web/assets/js/persian-calendar-page.js"
+        }
+    },
+    "positions": {
+        "dashboard.content.after": [
+            {
+                "renderer": "Module\\Crm\\PersianCalendar\\Position\\DashboardTodayWidget::render",
+                "priority": 15,
+                "key": "persian_calendar_today"
+            }
+        ],
+        "profile.content.after": [
+            {
+                "renderer": "Module\\Crm\\PersianCalendar\\Position\\ProfilePersianDatePanel::render",
+                "priority": 10,
+                "key": "persian_calendar_profile"
+            }
+        ]
+    },
+    "hooks": {},
+    "web_hooks": {},
+    "menu_items": [],
+    "service_provider": "Module\\Crm\\PersianCalendar\\PersianCalendarServiceProvider",
+    "config_defaults": {
+        "default_calendar": "persian",
+        "date_format": "YYYY/MM/DD",
+        "datetime_format": "YYYY/MM/DD - HH:mm",
+        "time_format": "HH:mm",
+        "hour_format": "24h",
+        "persian_numerals": true,
+        "first_day_of_week": "saturday",
+        "minute_step": 5,
+        "direction": "rtl",
+        "highlight_today": true,
+        "show_adjacent_days": true,
+        "weekend_day": "friday",
+        "dashboard_widget_enabled": true,
+        "profile_panel_enabled": true,
+        "autoformat_enabled": true,
+        "autoformat_selectors": [
+            "[data-crm-persian-date]",
+            "[datetime]"
+        ]
+    },
+    "mcp_tools": [
+        {
+            "name": "persian_calendar_today",
+            "description": "Return today's date in both the Persian (Jalali/Shamsi) and Gregorian calendars, with the localized Persian weekday and month names.",
+            "handler": "Module\\Crm\\PersianCalendar\\Mcp\\TodayTool",
+            "permissions": [],
+            "mode": "all",
+            "workspace_required": false,
+            "input_schema": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": false
+            }
+        },
+        {
+            "name": "persian_calendar_convert",
+            "description": "Convert a date between the Gregorian and Persian (Jalali/Shamsi) calendars. Pass either a Gregorian date (date=YYYY-MM-DD) or a Jalali date (jy/jm/jd or date=YYYY/MM/DD with Persian or Latin digits) together with direction=auto|g2j|j2g.",
+            "handler": "Module\\Crm\\PersianCalendar\\Mcp\\ConvertTool",
+            "permissions": [],
+            "mode": "all",
+            "workspace_required": false,
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "description": "Source date: 'YYYY-MM-DD' (Gregorian) or 'YYYY/MM/DD' (Jalali, Persian digits allowed)"
+                    },
+                    "jy": {
+                        "type": "integer",
+                        "description": "Jalali year (when date is not given)"
+                    },
+                    "jm": {
+                        "type": "integer",
+                        "description": "Jalali month 1-12"
+                    },
+                    "jd": {
+                        "type": "integer",
+                        "description": "Jalali day 1-31"
+                    },
+                    "direction": {
+                        "type": "string",
+                        "description": "auto (default), g2j or j2g"
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+# Build artifacts (release zips are attached to GitHub releases)
+*.zip
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+
+# Test / runtime leftovers
+*.log
+node_modules/
