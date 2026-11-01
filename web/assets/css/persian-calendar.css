@@ -1,0 +1,593 @@
+/**
+ * Persian (Jalali) Calendar & Date/Time module styles.
+ * Module: crm.persian-calendar
+ *
+ * Uses the TropaTT design tokens (assets/css/tokens.css) so the components
+ * automatically follow every theme: light, dark, contrast, sepia and the
+ * graphite palette. All component internals use the crm-pc-* prefix; the
+ * server-rendered widgets reuse the core crm-card / crm-section-card
+ * classes to stay visually native.
+ *
+ * Layout is logical-property based (margin-inline-start etc.) so the same
+ * rules render correctly in RTL (default for this module) and LTR.
+ */
+
+/* ==================================================================
+   Inline calendar
+   ================================================================== */
+
+.crm-pc-calendar {
+  direction: ltr; /* reset per component via dir attribute */
+  display: inline-block;
+  width: 100%;
+  max-width: 336px;
+  padding: 14px;
+  background: var(--crm-surface, #ffffff);
+  border: 1px solid var(--crm-border, #d7e2df);
+  border-radius: 14px;
+  box-shadow: var(--crm-shadow-sm, 0 1px 2px rgba(15, 23, 42, 0.06));
+  font-family: inherit;
+  user-select: none;
+}
+
+.crm-pc-calendar[dir="rtl"] {
+  direction: rtl;
+}
+
+/* ---- header: navigation ---- */
+
+.crm-pc-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-block-end: 10px;
+}
+
+.crm-pc-month-year {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.crm-pc-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border: 1px solid var(--crm-border, #d7e2df);
+  border-radius: 8px;
+  background: var(--crm-control-bg, #ffffff);
+  color: var(--crm-text, #111a19);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  flex: 0 0 auto;
+}
+
+.crm-pc-nav:hover:not(:disabled) {
+  background: var(--crm-bg-hover, #eef4f1);
+  border-color: var(--crm-border-strong, #c2ceca);
+}
+
+.crm-pc-nav:focus-visible {
+  outline: 2px solid var(--crm-focus-ring, #0f8f72);
+  outline-offset: 2px;
+}
+
+.crm-pc-nav-year {
+  inline-size: 28px;
+  font-weight: 600;
+}
+
+.crm-pc-month-select,
+.crm-pc-year-select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--crm-text, #111a19);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 4px 6px;
+  cursor: pointer;
+  min-inline-size: 0;
+}
+
+.crm-pc-month-select {
+  max-inline-size: 105px;
+}
+
+.crm-pc-year-select {
+  max-inline-size: 70px;
+}
+
+.crm-pc-month-select:hover,
+.crm-pc-year-select:hover {
+  background: var(--crm-bg-hover, #eef4f1);
+}
+
+.crm-pc-month-select:focus-visible,
+.crm-pc-year-select:focus-visible {
+  outline: 2px solid var(--crm-focus-ring, #0f8f72);
+  outline-offset: 1px;
+}
+
+.crm-pc-today-btn {
+  border: 1px solid var(--crm-primary-border, #a7d8cc);
+  background: var(--crm-accent-bg, rgba(15, 143, 114, 0.08));
+  color: var(--crm-accent-strong, #0b725c);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  cursor: pointer;
+  flex: 0 0 auto;
+  transition: background-color 0.15s ease;
+}
+
+.crm-pc-today-btn:hover {
+  background: var(--color-primary-100, #d0eae1);
+}
+
+.crm-pc-today-btn:focus-visible {
+  outline: 2px solid var(--crm-focus-ring, #0f8f72);
+  outline-offset: 2px;
+}
+
+.crm-pc-month-label {
+  font-size: 0.72rem;
+  color: var(--crm-text-muted, #596966);
+  text-align: center;
+  margin-block-end: 6px;
+  min-block-size: 1em;
+}
+
+/* ---- weekday header ---- */
+
+.crm-pc-weekdays,
+.crm-pc-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.crm-pc-weekday {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--crm-text-muted, #596966);
+  padding-block: 4px;
+}
+
+.crm-pc-weekday.crm-pc-weekend {
+  color: var(--crm-danger, #b54038);
+}
+
+/* ---- day cells ---- */
+
+.crm-pc-days {
+  border-radius: 10px;
+}
+
+.crm-pc-days:focus {
+  outline: none;
+}
+
+.crm-pc-days:focus-visible {
+  outline: 2px solid var(--crm-focus-ring, #0f8f72);
+  outline-offset: 2px;
+}
+
+.crm-pc-day {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  min-block-size: 38px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--crm-text, #111a19);
+  cursor: pointer;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.crm-pc-day:hover:not(.crm-pc-day-disabled) {
+  background: var(--crm-bg-hover, #eef4f1);
+}
+
+.crm-pc-day-empty {
+  cursor: default;
+}
+
+.crm-pc-adjacent {
+  color: var(--crm-text-muted, #596966);
+  opacity: 0.45;
+}
+
+.crm-pc-day-weekend:not(.crm-pc-day-selected):not(.crm-pc-day-today) {
+  color: var(--crm-danger, #b54038);
+}
+
+.crm-pc-day-disabled {
+  color: var(--crm-text-muted, #596966);
+  opacity: 0.35;
+  cursor: not-allowed;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.crm-pc-day-today:not(.crm-pc-day-selected) {
+  box-shadow: inset 0 0 0 2px var(--crm-accent, #0f8f72);
+  font-weight: 700;
+  color: var(--crm-accent-strong, #0b725c);
+}
+
+.crm-pc-day-selected {
+  background: var(--crm-accent, #0f8f72);
+  color: var(--crm-on-accent, #ffffff);
+  font-weight: 700;
+}
+
+.crm-pc-day-selected.crm-pc-day-today {
+  box-shadow: inset 0 0 0 2px var(--crm-accent-strong, #0b725c);
+}
+
+.crm-pc-day-focus::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 8px;
+  border: 1px dashed var(--crm-focus-ring, #0f8f72);
+  pointer-events: none;
+}
+
+.crm-pc-day:focus-visible {
+  outline: 2px solid var(--crm-focus-ring, #0f8f72);
+  outline-offset: -2px;
+}
+
+/* ==================================================================
+   Picker input
+   ================================================================== */
+
+.crm-pc-input {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==================================================================
+   Popover
+   ================================================================== */
+
+.crm-pc-popover {
+  position: absolute;
+  z-index: 1080; /* above Bootstrap modals (1055) and tooltips */
+  padding: 6px;
+  background: var(--crm-popover-bg, rgba(255, 255, 255, 0.96));
+  border: 1px solid var(--crm-popover-border, rgba(17, 26, 25, 0.1));
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
+  animation: crm-pc-pop-in 0.14s ease-out;
+}
+
+.crm-pc-popover .crm-pc-calendar {
+  border: none;
+  box-shadow: none;
+  padding: 8px;
+  background: transparent;
+  max-inline-size: none;
+}
+
+.crm-pc-above {
+  animation: crm-pc-pop-in-up 0.14s ease-out;
+}
+
+@keyframes crm-pc-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes crm-pc-pop-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---- time panel ---- */
+
+.crm-pc-time {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 10px 6px;
+  border-top: 1px solid var(--crm-border-light, rgba(0, 0, 0, 0.04));
+}
+
+.crm-pc-time-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+}
+
+.crm-pc-time-label {
+  font-size: 0.68rem;
+  color: var(--crm-text-muted, #596966);
+}
+
+.crm-pc-time-select {
+  border: 1px solid var(--crm-border, #d7e2df);
+  border-radius: 8px;
+  background: var(--crm-control-bg, #ffffff);
+  color: var(--crm-text, #111a19);
+  font-size: 0.9rem;
+  padding: 4px 6px;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.crm-pc-time-select:focus-visible {
+  outline: 2px solid var(--crm-focus-ring, #0f8f72);
+  outline-offset: 1px;
+}
+
+.crm-pc-time-sep {
+  font-size: 1.1rem;
+  color: var(--crm-text-muted, #596966);
+  padding-block-end: 6px;
+}
+
+/* ---- footer ---- */
+
+.crm-pc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px 6px;
+  border-top: 1px solid var(--crm-border-light, rgba(0, 0, 0, 0.04));
+}
+
+.crm-pc-btn {
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.crm-pc-btn:focus-visible {
+  outline: 2px solid var(--crm-focus-ring, #0f8f72);
+  outline-offset: 2px;
+}
+
+.crm-pc-btn-ghost {
+  border: 1px solid var(--crm-border, #d7e2df);
+  background: transparent;
+  color: var(--crm-text-muted, #596966);
+}
+
+.crm-pc-btn-ghost:hover {
+  background: var(--crm-bg-hover, #eef4f1);
+  color: var(--crm-text, #111a19);
+}
+
+.crm-pc-btn-primary {
+  border: 1px solid transparent;
+  background: var(--crm-accent, #0f8f72);
+  color: var(--crm-on-accent, #ffffff);
+}
+
+.crm-pc-btn-primary:hover {
+  background: var(--crm-accent-strong, #0b725c);
+}
+
+/* ==================================================================
+   Server-rendered widgets (positions)
+   ================================================================== */
+
+.crm-persian-today-widget {
+  direction: rtl;
+  padding: 14px 16px;
+  border-radius: 14px;
+}
+
+.crm-persian-today-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-block-end: 6px;
+}
+
+.crm-persian-today-weekday {
+  font-weight: 700;
+  color: var(--crm-accent-strong, #0b725c);
+}
+
+.crm-persian-today-badge {
+  font-size: 0.78rem;
+  background: var(--crm-accent-bg, rgba(15, 143, 114, 0.08));
+  color: var(--crm-accent-strong, #0b725c);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-weight: 600;
+}
+
+.crm-persian-today-date {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.crm-persian-today-long {
+  color: var(--crm-text-muted, #596966);
+  font-size: 0.9rem;
+  margin-block: 2px 10px;
+}
+
+.crm-persian-today-progress {
+  block-size: 6px;
+  border-radius: 999px;
+  background: var(--crm-bg-deep, #edf2f0);
+  overflow: hidden;
+  margin-block-end: 8px;
+}
+
+.crm-persian-today-progress-bar {
+  block-size: 100%;
+  border-radius: inherit;
+  background: var(--crm-accent, #0f8f72);
+  transition: inline-size 0.3s ease;
+}
+
+.crm-persian-today-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* profile panel mini month */
+
+.crm-persian-profile-panel table.crm-persian-mini-month {
+  inline-size: 100%;
+  border-collapse: collapse;
+  direction: rtl;
+}
+
+.crm-persian-mini-month th,
+.crm-persian-mini-month td {
+  text-align: center;
+  padding: 4px 2px;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.crm-persian-mini-wd {
+  color: var(--crm-text-muted, #596966);
+  font-weight: 600;
+}
+
+.crm-persian-mini-day {
+  border-radius: 8px;
+  cursor: default;
+}
+
+.crm-persian-mini-weekend {
+  color: var(--crm-danger, #b54038);
+}
+
+.crm-persian-mini-today {
+  background: var(--crm-accent, #0f8f72);
+  color: var(--crm-on-accent, #ffffff);
+  font-weight: 700;
+}
+
+.crm-persian-mini-empty {
+  color: transparent;
+}
+
+/* ==================================================================
+   Module demo page helpers
+   ================================================================== */
+
+.crm-persian-demo-section {
+  scroll-margin-block-start: 80px;
+}
+
+.crm-persian-demo-result {
+  font-variant-numeric: tabular-nums;
+  min-block-size: 1.4em;
+}
+
+.crm-persian-code {
+  direction: ltr;
+  text-align: start;
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.82rem;
+  background: var(--crm-bg-deep, #edf2f0);
+  border: 1px solid var(--crm-border-light, rgba(0, 0, 0, 0.04));
+  border-radius: 8px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 0;
+}
+
+/* ==================================================================
+   Responsive
+   ================================================================== */
+
+@media (max-width: 575.98px) {
+  .crm-pc-calendar {
+    max-inline-size: none;
+    padding: 10px;
+  }
+
+  .crm-pc-day {
+    min-block-size: 34px;
+    font-size: 0.85rem;
+  }
+
+  .crm-pc-today-btn {
+    font-size: 0.72rem;
+    padding: 4px 8px;
+  }
+
+  .crm-pc-popover {
+    inset-inline: 8px;
+    inline-size: auto;
+    max-inline-size: calc(100vw - 16px);
+  }
+
+  .crm-pc-popover .crm-pc-calendar {
+    inline-size: 100%;
+  }
+}
+
+/* ==================================================================
+   High-contrast theme repair (matches core themes.css conventions)
+   ================================================================== */
+
+[data-theme="contrast"] .crm-pc-day-selected {
+  background: var(--crm-accent-strong, #0b725c);
+}
+
+[data-theme="contrast"] .crm-pc-adjacent {
+  opacity: 0.6;
+}
+
+[data-theme="sepia"] .crm-pc-popover {
+  background: var(--crm-surface, #fdf6ec);
+}
+
+/* Respect users who prefer reduced motion. */
+
+@media (prefers-reduced-motion: reduce) {
+  .crm-pc-popover {
+    animation: none;
+  }
+
+  .crm-persian-today-progress-bar {
+    transition: none;
+  }
+}
